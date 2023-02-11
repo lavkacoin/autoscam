@@ -1,1 +1,1 @@
-TOKEN = "anus"
+TOKEN = "botfather_token"
