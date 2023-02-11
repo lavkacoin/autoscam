@@ -4,7 +4,7 @@ import config
 import requests
 
 bot = telebot.TeleBot(config.TOKEN)
-HEADERS = {'Rocket-Pay-Key': config.ROCKET_TOKEN}
+HEADERS_ROCKET = {'Rocket-Pay-Key' : config.ROCKET_TOKEN}
 
 #Скам через Tonkeeper
 
@@ -26,21 +26,21 @@ def process_amount_step_tonhub(message):
             except ValueError:
                 bot.send_message(chat_id=message.chat.id, text="Неправильное число")
 
-#Скам чере TonRocket
+#Скам через TonRocket
 
 def process_amount_step_rocket(message):
     try:
         amount = int(message.text)
         payload = {
-            "amount": amount,
-            "numPayments": 1,
-            "currency": "TONCOIN",
-            "description": "Pay to get scammed",
-            "hiddenMessage": "thank you",
-            "callbackUrl": "https://t.me/lavkaton",
-            "expiredIn": 300
-        }
-        response = requests.post("https://pay.ton-rocket.com/tg-invoices", headers=HEADERS, json=payload)
+                    "amount": amount,
+                    "numPayments": 1,
+                    "currency": "TONCOIN",
+                    "description": "Pay to get scammed",
+                    "hiddenMessage": "thank you",
+                    "callbackUrl": "https://t.me/lavkaton",
+                    "expiredIn": 300
+                }
+        response = requests.post("https://pay.ton-rocket.com/tg-invoices", headers=HEADERS_ROCKET, json=payload)
         if response.status_code == 200:
             link = response.json()['link']
             bot.send_message(chat_id=message.chat.id, text=link)
@@ -84,8 +84,9 @@ def get_text_messages(message):
         btn1 = types.KeyboardButton("💎 Tonkeeper")
         btn2 = types.KeyboardButton('💎 Tonhub')
         btn3 = types.KeyboardButton('🚀 Ton Rocket')
+        btn4 = types.KeyboardButton('💎 CryptoBot')
         markup.row(btn1, btn2)
-        markup.row(btn3)
+        markup.row(btn3, btn4)
         bot.send_message(message.from_user.id, 'Через что будем скамиться?', reply_markup=markup, parse_mode='Markdown')
 
     elif message.text == '💎 Tonkeeper':
@@ -97,6 +98,10 @@ def get_text_messages(message):
         bot.register_next_step_handler(message, process_amount_step_tonhub)
     
     elif message.text == '🚀 Ton Rocket':
+        bot.send_message(chat_id=message.chat.id, text="На сколько TON хотите заскамиться?")
+        bot.register_next_step_handler(message, process_amount_step_rocket)
+    
+    elif message.text == '💎 CryptoBot':
         bot.send_message(chat_id=message.chat.id, text="На сколько TON хотите заскамиться?")
         bot.register_next_step_handler(message, process_amount_step_rocket)
 
