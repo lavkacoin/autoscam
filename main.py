@@ -60,7 +60,9 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn1 = types.KeyboardButton("💎 Tonkeeper")
         btn2 = types.KeyboardButton('💎 Tonhub')
+        btn3 = types.KeyboardButton('🔙 Вернуться к выбору языка')
         markup.row(btn1, btn2)
+        markup.row(btn3)
         bot.send_message(message.from_user.id, 'Через что будем скамиться?', reply_markup=markup, parse_mode='Markdown')
 
     elif message.text == '💎 Tonkeeper':
@@ -91,7 +93,9 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn1 = types.KeyboardButton("💎 Tonkeeper!")
         btn2 = types.KeyboardButton('💎 Tonhub!')
+        btn3 = types.KeyboardButton('🔙 Back to language select')
         markup.row(btn1, btn2)
+        markup.row(btn3)
         bot.send_message(message.from_user.id, 'How would you like to get scammed?', reply_markup=markup, parse_mode='Markdown')
 
     elif message.text == '💎 Tonkeeper!':
