@@ -71,9 +71,8 @@ def get_text_messages(message):
     elif message.text == '💎 Tonhub':
         bot.send_message(chat_id=message.chat.id, text="На сколько TON хотите заскамиться?")
         bot.register_next_step_handler(message, process_amount_step_tonhub)
-        
 #английский язык
-    if message.text == '🇬🇧 English':
+    elif message.text == '🇬🇧 English':
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn1 = types.KeyboardButton("💰 GET SCAMMED")
         btn2 = types.KeyboardButton('🔙 Back to language select')
