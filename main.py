@@ -26,29 +26,6 @@ def process_amount_step_tonhub(message):
             except ValueError:
                 bot.send_message(chat_id=message.chat.id, text="Неправильное число")
 
-#Скам через TonRocket
-
-def process_amount_step_rocket(message):
-    try:
-        amount = int(message.text)
-        payload = {
-                    "amount": amount,
-                    "numPayments": 1,
-                    "currency": "TONCOIN",
-                    "description": "Pay to get scammed",
-                    "hiddenMessage": "thank you",
-                    "callbackUrl": "https://t.me/lavkaton",
-                    "expiredIn": 300
-                }
-        response = requests.post("https://pay.ton-rocket.com/tg-invoices", headers=HEADERS_ROCKET, json=payload)
-        if response.status_code == 200:
-            link = response.json()['link']
-            bot.send_message(chat_id=message.chat.id, text=link)
-        else:
-            bot.send_message(chat_id=message.chat.id, text="Failed to create invoice. Please try again later.")
-    except ValueError:
-        bot.send_message(chat_id=message.chat.id, text="Invalid amount. Please enter a valid amount.")
-
 @bot.message_handler(commands=['start'])
 def start(message):
 
@@ -83,8 +60,6 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn1 = types.KeyboardButton("💎 Tonkeeper")
         btn2 = types.KeyboardButton('💎 Tonhub')
-        btn3 = types.KeyboardButton('🚀 Ton Rocket')
-        btn4 = types.KeyboardButton('💎 CryptoBot')
         markup.row(btn1, btn2)
         markup.row(btn3, btn4)
         bot.send_message(message.from_user.id, 'Через что будем скамиться?', reply_markup=markup, parse_mode='Markdown')
@@ -96,13 +71,38 @@ def get_text_messages(message):
     elif message.text == '💎 Tonhub':
         bot.send_message(chat_id=message.chat.id, text="На сколько TON хотите заскамиться?")
         bot.register_next_step_handler(message, process_amount_step_tonhub)
-    
-    elif message.text == '🚀 Ton Rocket':
-        bot.send_message(chat_id=message.chat.id, text="На сколько TON хотите заскамиться?")
-        bot.register_next_step_handler(message, process_amount_step_rocket)
-    
-    elif message.text == '💎 CryptoBot':
-        bot.send_message(chat_id=message.chat.id, text="На сколько TON хотите заскамиться?")
-        bot.register_next_step_handler(message, process_amount_step_rocket)
+        
+#английский язык
+    if message.text == '🇬🇧 English':
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        btn1 = types.KeyboardButton("💰 GET SCAMMED")
+        btn2 = types.KeyboardButton('🔙 Back to language select')
+        markup.row(btn1)
+        markup.row(btn2)
+        bot.send_message(message.from_user.id, 'Welcome to LAVKA autoscam! \n \n LAVKA autoscam is an open-source scam utility. Before LAVKA autoscam. you had to wait for a scam NFT collection or for a scammer to reach you. Now you can just press the button below and get scammed. \n \n Also you can have a look at LAVKA autoscam GitHub and subscribe to LAVKA Foundation \n \n [Channel](https://t.me/lavkaton) | [Website](lavkafoundation.fun) | [GitHub](https://github.com/orgs/lavkacoin/repositories) ', reply_markup=markup, parse_mode='Markdown')
+
+    elif message.text == '🔙 Back to language select':
+         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+         btn1 = types.KeyboardButton("🇷🇺 Русский")
+         btn2 = types.KeyboardButton('🇬🇧 English')
+         markup.add(btn1, btn2)
+
+         bot.send_message(message.from_user.id, "🇷🇺 Выберите язык / 🇬🇧 Choose your language", reply_markup=markup)
+
+    elif message.text == '💰 GET SCAMMED':
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        btn1 = types.KeyboardButton("💎 Tonkeeper!")
+        btn2 = types.KeyboardButton('💎 Tonhub!')
+        markup.row(btn1, btn2)
+        markup.row(btn3, btn4)
+        bot.send_message(message.from_user.id, 'How would you like to get scammed?', reply_markup=markup, parse_mode='Markdown')
+
+    elif message.text == '💎 Tonkeeper!':
+        bot.send_message(chat_id=message.chat.id, text="How much would you like to get scammed for?")
+        bot.register_next_step_handler(message, process_amount_step_tonkeeper)
+
+    elif message.text == '💎 Tonhub!':
+        bot.send_message(chat_id=message.chat.id, text="How much would you like to get scammed for?")
+        bot.register_next_step_handler(message, process_amount_step_tonhub)
 
 bot.polling(none_stop=True, interval=0) #обязательная для работы бота часть
