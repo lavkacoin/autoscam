@@ -10,7 +10,7 @@ HEADERS_ROCKET = {'Rocket-Pay-Key' : config.ROCKET_TOKEN}
 
 def process_amount_step_tonkeeper(message):
             try:
-                amount = int(message.text)
+                amount = float(message.text)
                 link = f"https://app.tonkeeper.com/transfer/EQAHbfM0HD19bzOi-KTDIr5wwvmOYPBeIrnFmJ-6gvbBcCeI?amount={amount*1000000000}"
                 bot.send_message(chat_id=message.chat.id, text=link)
             except ValueError:
@@ -20,7 +20,7 @@ def process_amount_step_tonkeeper(message):
 
 def process_amount_step_tonhub(message):
             try:
-                amount = int(message.text)
+                amount = float(message.text)
                 link = f"https://tonhub.com/transfer/EQAHbfM0HD19bzOi-KTDIr5wwvmOYPBeIrnFmJ-6gvbBcCeI?amount={amount*1000000000}"
                 bot.send_message(chat_id=message.chat.id, text=link)
             except ValueError:
